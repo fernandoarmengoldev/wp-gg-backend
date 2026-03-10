@@ -1,14 +1,13 @@
 # WP.GG Backend - League of Legends Statistics API
 
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-000000?style=for-the-badge&logo=bun&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
-## IMPORTANT NOTE
+WP.GG Backend is a Bun + TypeScript REST API server that serves as the backend for the WP.GG League of Legends statistics application. It integrates with Riot Games API to fetch real-time summoner data and stores match statistics in MongoDB for analytics and champion statistics calculation.
 
-ALL DEVELOPMENT OF THIS BACKEND SERVER (RESEARCH, CODING, TESTING, DESIGN, IMPLEMENTATION, AND DEPLOYMENT) WAS COMPLETED DURING 2021 AND 2022. IN THE FUTURE, I HOPE TO RESUME DEVELOPMENT TO MAKE SIGNIFICANT CODE IMPROVEMENTS, UPDATE THE SERVER TO WORK WITH THE CHANGES RIOT GAMES HAS MADE TO THEIR API OVER THESE YEARS, AS WELL AS IMPROVE GENERAL PERFORMANCE AND INCORPORATE NEW FEATURES.
+Most of the original development of this backend server (research, coding, testing, design, implementation, and deployment) was carried out during 2021 and 2022. 
 
-WP.GG Backend is a Node.js REST API server that serves as the backend for the WP.GG League of Legends statistics application. It integrates with Riot Games API to fetch real-time summoner data and stores match statistics in MongoDB for analytics and champion statistics calculation.
+After that period, the project remained inactive for some time. In 2026, development was resumed to continue improving the codebase, adapt the server to the Riot Games API changes introduced over the years, improve performance, and keep adding new features.
 
 ## Main Features
 
@@ -44,24 +43,28 @@ WP.GG Backend is a Node.js REST API server that serves as the backend for the WP
 
 ## Technologies Used
 
-- **Runtime**: Node.js
-- **Framework**: Express.js for REST API
+- **Runtime**: Bun
+- **Language**: TypeScript
+- **Server**: `Bun.serve()` for the REST API
 - **Database**: MongoDB for match storage and analytics
 - **API Integration**: Riot Games API for real-time LoL data
 - **Environment**: dotenv for configuration management
-- **Development**: nodemon for hot reloading
+- **Development**: Bun watch mode for hot reloading
 
 ## Project Structure
 
 ```
+.env                      # Environment variables for local development
+tsconfig.json             # TypeScript configuration
 src/
-├── app.js                  # Main application entry point
+├── app.ts                  # Main application entry point
+├── types.ts                # Shared TypeScript types
 ├── routes/
-│   ├── summoner.js         # Summoner-related API endpoints
-│   └── champion.js         # Champion statistics endpoints
+│   ├── summoner.ts         # Summoner-related API endpoints
+│   └── champion.ts         # Champion statistics endpoints
 ├── scripts/
-│   └── data-generator.js   # Automatic match collection script
-└── variables.env           # Environment configuration (API keys, DB URL)
+│   └── data-generator.ts   # Automatic match collection script
+└── ...
 ```
 
 ## API Endpoints
@@ -98,7 +101,7 @@ The server integrates with:
 ## Setup Instructions
 
 ### Prerequisites
-- Node.js installed
+- Bun installed
 - MongoDB running locally or accessible
 - Riot Games API key (get from [developer.riotgames.com](https://developer.riotgames.com/))
 
@@ -107,26 +110,29 @@ The server integrates with:
 1. Clone the repository
 2. Install dependencies:
    ```bash
-   npm install
+   bun install
    ```
 
-3. Create a `.env` file or configure `src/variables.env`:
-   ```
-   DB_URL=mongodb://0.0.0.0:27017
-   RIOT_API_KEY=your_riot_api_key_here
-   GET_RANDOM_MATCHES=false
-   ```
+3. Create a `.env` file in the project root (you can copy `.env.example`):
+    ```
+    DB_URL=mongodb://0.0.0.0:27017
+    RIOT_API_KEY=your_riot_api_key_here
+    GET_RANDOM_MATCHES=false
+    ```
 
 4. Start MongoDB service
 
 5. Run the server:
-   ```bash
-   # Development mode with hot reload
-   npm run dev
+    ```bash
+# Development mode with hot reload
+bun run dev
 
-   # Production mode
-   npm start
-   ```
+# Production mode
+bun run start
+
+# Type-check the project
+bun run typecheck
+     ```
 
 The server will run on port 3000 by default.
 
@@ -153,12 +159,12 @@ This helps continuously grow the match database for more accurate statistics.
 ```json
 {
   "dependencies": {
-    "dotenv": "^16.0.1",
-    "express": "^4.18.0",
-    "mongodb": "^4.5.0"
+    "dotenv": "^17.0.0",
+    "mongodb": "^6.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "@types/bun": "^1.3.0",
+    "typescript": "^5.9.0"
   }
 }
 ```
@@ -204,7 +210,7 @@ This project is an educational/fan application of League of Legends. All data is
 
 - Data provided by Riot Games API
 - MongoDB for database management
-- Node.js and Express for server implementation
+- Bun and MongoDB for the backend runtime and storage
 - Inspired by op.gg and other LoL statistics platforms
 
 ---
