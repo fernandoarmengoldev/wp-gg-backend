@@ -1,62 +1,34 @@
 import 'dotenv/config'
 
-import { MongoClient, type Db } from 'mongodb'
+import { getAppConfig } from './config'
+import { connectToDatabase } from './db'
+import { logRandomMatchesDisabled, startRandomMatchesJob } from './jobs/random-matches'
+import { createRoutes } from './routes'
 
-import { getChampionStatsHandler, getPositionsHandler, rebuildPositionsHandler } from './routes/champion'
-import { getEloHandler, getMasteryHandler, getMatchHandler, getSummonerHandler } from './routes/summoner'
-import { intervalFunc } from './scripts/data-generator'
-import type { BunRouteRequest } from './types'
-
+// Create a JSON response with a custom HTTP status code.
 function createJsonResponse<T>(body: T, status = 200): Response {
   return Response.json(body, { status })
 }
 
+// Boot the database connection, optional background jobs, and the Bun HTTP server.
 async function startServer(): Promise<void> {
-  const apiKey = process.env.RIOT_API_KEY
-  const getRandomMatches = process.env.GET_RANDOM_MATCHES === 'true'
-  const port = Number(process.env.PORT || 3000)
-  const url = process.env.DB_URL
+  // Load the validated runtime configuration for the application.
+  const { apiKey, getRandomMatches, port, randomMatchIntervalMs } = getAppConfig()
 
-  if (!apiKey) {
-    throw new Error('RIOT_API_KEY no esta definido')
-  }
+  // Connect to MongoDB before exposing the API routes.
+  const db = await connectToDatabase()
 
-  if (!url) {
-    throw new Error('DB_URL no esta definido')
-  }
-
-  const client = new MongoClient(url)
-
-  try {
-    await client.connect()
-    console.log('Conectado a la base de datos')
-  } catch (error) {
-    console.log('No se puede conectar a la base de datos')
-    console.log(error)
-    throw error
-  }
-
-  const db = client.db('lol')
-
+  // Start or skip the background match collector based on the environment flag.
   if (getRandomMatches) {
-    console.log('Random match collection is enabled')
-    startRandomMatchesJob(db, apiKey)
+    startRandomMatchesJob(db, apiKey, randomMatchIntervalMs)
   } else {
-    console.log('Random match collection is disabled')
+    logRandomMatchesDisabled()
   }
 
+  // Start the HTTP server with the assembled route table and shared handlers.
   const server = Bun.serve({
     port,
-    routes: {
-      '/': () => createJsonResponse({ message: 'Servidor Activo' }),
-      '/api/summoner/:name': req => getSummonerHandler(req as BunRouteRequest<{ name: string }>, { apiKey }),
-      '/api/maestry/:id': req => getMasteryHandler(req as BunRouteRequest<{ id: string }>, { apiKey }),
-      '/api/elo/:id': req => getEloHandler(req as BunRouteRequest<{ id: string }>, { apiKey }),
-      '/api/match/:matchid': req => getMatchHandler(req as BunRouteRequest<{ matchid: string }>, { apiKey }),
-      '/api/matchesFromChamp/:champ': req => getChampionStatsHandler(req as BunRouteRequest<{ champ: string }>, { db }),
-      '/api/position': () => getPositionsHandler({ db }),
-      '/api/positionSetting': () => rebuildPositionsHandler({ db }),
-    },
+    routes: createRoutes({ apiKey, db }),
     fetch() {
       return createJsonResponse({ message: 'Not Found' }, 404)
     },
@@ -66,17 +38,12 @@ async function startServer(): Promise<void> {
     },
   })
 
-  console.log('Server on port', server.port)
+  // Log the final listening port after Bun finishes booting the server.
+  console.log(`Server running on port ${server.port}`)
 }
 
-function startRandomMatchesJob(db: Db, apiKey: string): void {
-  setInterval(() => {
-    intervalFunc({ db, apiKey }).catch(error => {
-      console.error('Error en la recoleccion automatica', error)
-    })
-  }, 5000)
-}
-
-startServer().catch(() => {
+// Exit with a failure code when startup cannot complete successfully.
+startServer().catch(error => {
+  console.error('Server startup failed', error)
   process.exit(1)
 })

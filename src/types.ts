@@ -12,8 +12,22 @@ export interface RiotErrorResponse {
   [key: string]: unknown
 }
 
-export interface SummonerResponse {
+export interface RiotAccountResponse {
   puuid: string
+  gameName: string
+  tagLine: string
+}
+
+export interface SummonerProfileResponse {
+  puuid: string
+  id?: string
+  accountId?: string
+  profileIconId?: number
+  summonerLevel?: number
+  [key: string]: unknown
+}
+
+export interface SummonerResponse extends RiotAccountResponse, SummonerProfileResponse {
   history?: string[]
   [key: string]: unknown
 }

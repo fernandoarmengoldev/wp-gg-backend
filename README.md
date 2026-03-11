@@ -1,13 +1,14 @@
-# WP.GG Backend - League of Legends Statistics API
-
 ![Bun](https://img.shields.io/badge/Bun-000000?style=for-the-badge&logo=bun&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+
+# WP.GG Backend - League of Legends Statistics API
 
 WP.GG Backend is a Bun + TypeScript REST API server that serves as the backend for the WP.GG League of Legends statistics application. It integrates with Riot Games API to fetch real-time summoner data and stores match statistics in MongoDB for analytics and champion statistics calculation.
 
-Most of the original development of this backend server (research, coding, testing, design, implementation, and deployment) was carried out during 2021 and 2022. 
+Most of the original development of this backend server (research, coding, testing, design, implementation, and deployment) was carried out during 2021 and 2022. After that period, the project remained inactive for some time.
 
-After that period, the project remained inactive for some time. In 2026, development was resumed to continue improving the codebase, adapt the server to the Riot Games API changes introduced over the years, improve performance, and keep adding new features.
+In 2026, development was resumed to continue improving the codebase, adapt the server to the Riot Games API changes introduced over the years, improve performance, and keep adding new features.
 
 ## Main Features
 
