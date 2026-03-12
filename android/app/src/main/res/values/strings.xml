@@ -1,0 +1,96 @@
+<resources>
+    <string name="app_name" translatable="false">GGWP</string>
+
+    <string name="url_main_cd">https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/</string>
+
+    <string name="url_champ_skin" translatable="false">https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-splashes/</string>
+    <string name="url_champ_icon" translatable="false">https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/</string>
+    <string name="url_items_icon" translatable="false">https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/</string>
+    <string name="url_spells_icon" translatable="false">https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/</string>
+    <string name="url_runes_icon" translatable="false">https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/</string>
+    <string name="url_summoner_icon" translatable="false">https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/</string>
+
+    <string name="network_error">An error has occurred, please check your internet connection and restart the application</string>
+    <string name="not_exist">That summoner doesn\'t exist.</string>
+
+    <string name="summoner">Summoner</string>
+    <string name="champions">Champions</string>
+    <string name="wiki">Wiki</string>
+
+    <string name="recent_search">Recent searches</string>
+    <string name="search_sum">Search summoner…</string>
+    <string name="search_champ">Search champion…</string>
+    <string name="search_item">Search item…</string>
+
+    <string name="url_champs_wiki">https://universe.leagueoflegends.com/en_US/champions/</string>
+    <string name="url_region_wiki">https://universe.leagueoflegends.com/en_US/regions/</string>
+    <string name="url_map_wiki">https://map.leagueoflegends.com/en_US</string>
+
+    <string name="items">Items</string>
+    <string name="spells">Spells</string>
+    <string name="runes">Runes</string>
+    <string name="regions">Regions</string>
+    <string name="map">Map</string>
+
+    <string name="not_enough_data">There is not enough data for that character</string>
+
+    <string name="statistics">Statistics</string>
+    <string name="information">Information</string>
+    
+    <string name="good_against">is STRONG against</string>
+    <string name="bad_against">is WEAK against</string>
+    
+    <string name="pickrate" translatable="false">PickRate</string>
+    <string name="option_a">Option A</string>
+    <string name="option_b">Option B</string>
+
+    <string name="recommended_runes">Recommended runes</string>
+    <string name="recommended_spells">Recommended spells</string>
+    <string name="recommended_mythics">Recommended mythics</string>
+    <string name="recommended_legendaries">Recommended legendaries</string>
+    <string name="recommended_boots">Recommended boots</string>
+    
+    <string name="abilities">Abilities</string>
+    <string name="difficulty">Difficulty</string>
+    <array name="difficulty_levels">
+        <item>Easy</item>
+        <item>Normal</item>
+        <item>Hard</item>
+    </array>
+    <array name="type">
+        <item>Damage</item>
+        <item>Durability</item>
+        <item>Crowd control</item>
+        <item>Mobility</item>
+        <item>Utility</item>
+    </array>
+
+    <string name="solo_duo">Ranked Solo/Duo</string>
+    <string name="flex">Ranked Flex</string>
+
+    <string name="team">Team</string>
+
+    <array name="charts">
+        <item>Total damage dealt to champions</item>
+        <item>Physical damage dealt to champions</item>
+        <item>Magic damage dealt to champions</item>
+        <item>True damage dealt to champions</item>
+        <item>Physical damage dealt</item>
+        <item>Magic damage dealt</item>
+        <item>True damage dealt</item>
+        <item>Total damage to turrets</item>
+        <item>Total damage to targets</item>
+        <item>Healing done</item>
+        <item>Damage taken</item>
+        <item>Physical damage received</item>
+        <item>True damage taken</item>
+        <item>Mitigated damage on self</item>
+        <item>Gold Earned</item>
+        <item>Gold Spent</item>
+        <item>Vision Score</item>
+        <item>Guardians placed</item>
+        <item>Guardians destroyed</item>
+        <item>Control Wards purchased</item>
+        <item>Slain minions</item>
+    </array>
+</resources>

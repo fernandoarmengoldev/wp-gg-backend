@@ -1,225 +1,183 @@
 <p align="center">
-  <img src="./docs/banner.png" alt="WP.GG banner" width="900" />
+  <img src="./server/docs/banner.png" alt="WP.GG banner" width="900" />
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Bun-000000?style=for-the-badge&logo=bun&logoColor=white" alt="Bun" />
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android" />
+  <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin" />
 </p>
 
-# WP.GG Backend - League of Legends Statistics API
+# WP.GG
 
-WP.GG Backend is a Bun + TypeScript REST API server that serves as the backend for the WP.GG League of Legends statistics application. It integrates with Riot Games API to fetch real-time summoner data and stores match statistics in MongoDB for analytics and champion statistics calculation.
+WP.GG is a League of Legends project organized as a monorepo with two main parts:
 
-Most of the original development of this backend server (research, coding, testing, design, implementation, and deployment) was carried out during 2021 and 2022. After that period, the project remained inactive for some time.
+- `server/`: a Bun + TypeScript REST API that integrates with Riot Games API and stores match data in MongoDB.
+- `android/`: a native Android app written in Kotlin that consumes the backend and CommunityDragon data.
 
-In 2026, development was resumed to continue improving the codebase, adapt the server to the Riot Games API changes introduced over the years, improve performance, and keep adding new features.
+Most of the original work was done in 2021-2022. In 2026 the project was resumed, the backend was moved into `server/`, and the Android client was consolidated into the same repository.
 
-## Main Features
+## Repository Structure
 
-### Summoner Data
-- Search summoners by name on EUW server
-- Retrieve summoner profile (ID, PUUID, profile icon, level)
-- Get recent match history (last 20 matches)
-- Fetch champion mastery data for summoners
-- Get ranked information (Solo/Duo and Flex queue ranks)
-
-### Match Statistics
-- Retrieve complete match data from Riot API
-- Store matches in MongoDB for analysis
-- Track individual player performance in matches
-- Access detailed participant information (items, runes, spells, KDA, etc.)
-
-### Champion Analytics
-- **Win Rate & Pick Rate**: Calculate win and pick rates for each champion from stored matches
-- **Matchups**: Determine best and worst matchups based on lane opponents
-- **Recommended Build**:
-  - Most popular boots
-  - Most popular mythic items
-  - Most popular legendary items
-- **Spells**: Most used summoner spells
-- **Runes**: Most popular rune configurations
-- **Position Detection**: Automatically determine champion roles (Top, Jungle, Mid, Bot, Support)
-
-### Data Collection
-- Automatic match collection system (configurable)
-- Random match sampling from existing database
-- Recursive match discovery through participant PUUIDs
-- Periodic data updates via interval function
-
-## Technologies Used
-
-- **Runtime**: Bun
-- **Language**: TypeScript
-- **Server**: `Bun.serve()` for the REST API
-- **Database**: MongoDB for match storage and analytics
-- **API Integration**: Riot Games API for real-time LoL data
-- **Environment**: dotenv for configuration management
-- **Development**: Bun watch mode for hot reloading
-
-## Project Structure
-
-```
-.env                      # Environment variables for local development
-tsconfig.json             # TypeScript configuration
-src/
-├── app.ts                  # Main application entry point
-├── types.ts                # Shared TypeScript types
-├── routes/
-│   ├── summoner.ts         # Summoner-related API endpoints
-│   └── champion.ts         # Champion statistics endpoints
-├── scripts/
-│   └── data-generator.ts   # Automatic match collection script
-└── ...
+```text
+.
+├── android/
+│   ├── app/
+│   ├── build.gradle
+│   ├── gradle.properties
+│   ├── gradlew
+│   └── settings.gradle
+├── server/
+│   ├── docs/
+│   ├── src/
+│   ├── package.json
+│   └── tsconfig.json
+├── .gitignore
+└── README.md
 ```
 
-## API Endpoints
+## Backend
 
-### Summoner Endpoints
-- `GET /api/summoner/:name` - Get summoner data and match history
-- `GET /api/maestry/:id` - Get champion mastery data for a summoner
-- `GET /api/elo/:id` - Get ranked information for a summoner
-- `GET /api/match/:matchid` - Get detailed match data
+The backend provides the data layer for WP.GG:
 
-### Champion Statistics Endpoints
-- `GET /api/matchesFromChamp/:champ` - Get comprehensive champion statistics
-  - Win rate and pick rate
-  - Best and worst matchups
-  - Recommended items (boots, mythics, legendaries)
-  - Recommended spells and runes
-- `GET /api/position` - Get all champion positions
-- `GET /api/positionSetting` - Recalculate champion positions from match data
+- Fetches summoner, mastery, ranked, and match data from Riot Games API.
+- Stores matches in MongoDB.
+- Calculates champion analytics from stored matches.
+- Exposes HTTP routes for the Android client.
+- Can run a background random-match collector to keep growing the dataset.
+
+### Main backend features
+
+- Summoner profile lookup
+- Match history retrieval
+- Champion mastery and ranked data
+- Champion win rate and pick rate
+- Best and worst matchups
+- Recommended boots, mythics, legendary items, spells, and runes
+- Champion position detection
+
+### Backend routes
+
+Routes are currently defined in `server/src/routes.ts`:
+
+- `GET /` - health check
+- `GET /api/summoner/:gameName/:tagLine` - summoner profile and recent history
+- `GET /api/maestry/:id` - champion mastery by summoner id
+- `GET /api/elo/:id` - ranked data by summoner id
+- `GET /api/match/:matchid` - full match detail
+- `GET /api/matchesFromChamp/:champ` - aggregated champion statistics
+- `GET /api/position` - stored champion positions
+- `GET /api/positionSetting` - rebuild champion positions from match data
+
+### Backend setup
+
+Requirements:
+
+- Bun 1.x
+- MongoDB
+- Riot Games API key
+
+Install dependencies:
+
+```bash
+cd server
+bun install
+```
+
+Create `server/.env`:
+
+```env
+DB_URL=mongodb://0.0.0.0:27017
+RIOT_API_KEY=your_riot_api_key_here
+GET_RANDOM_MATCHES=false
+PORT=3000
+RANDOM_MATCH_INTERVAL_MS=5000
+```
+
+Run the backend:
+
+```bash
+cd server
+bun run dev
+```
+
+Other useful commands:
+
+```bash
+cd server
+bun run start
+bun run typecheck
+```
+
+By default the API listens on `http://localhost:3000`.
+
+## Android App
+
+The Android app is a native client built with Kotlin, classic Android Views, and ViewBinding.
+
+### Main app sections
+
+- `Summoner`: summoner search, recent searches, ranked info, mastery, and recent matches
+- `Champions`: champion list, role filters, and detail pages
+- `Wiki`: items, spells, runes, and external League universe pages
+
+### Android features
+
+- Local caching of recent summoner searches through `SharedPreferences`
+- Champion statistics screen with matchup and build recommendations
+- Champion information screen with abilities, role info, and videos
+- Match detail screen with general stats and charts
+- Static game data loading from CommunityDragon
+
+### Android stack
+
+- Kotlin
+- Android SDK 32
+- Retrofit + Gson
+- Glide
+- Kotlin Coroutines
+- MPAndroidChart
+- GraphView
+- Material Components
+
+### Android setup
+
+Requirements:
+
+- Android Studio
+- Android SDK 32
+- Emulator or Android device
+
+Run the app:
+
+1. Open `android/` in Android Studio.
+2. Sync Gradle.
+3. Run the `app` configuration on an emulator or device.
+
+You can also build from the command line:
+
+```bash
+cd android
+./gradlew assembleDebug
+```
+
+## Integration Notes
+
+- The Android app contains a local emulator base URL at `http://10.0.2.2:3000/api/` in `android/app/src/main/java/com/fernandoarmengol/ggwp/network/RetrofitHelper.kt`.
+- The same file also contains a legacy hosted backend URL.
+- CommunityDragon is used by the app for champion, item, spell, rune, splash, and icon assets.
+- The backend currently expects the summoner route format `:gameName/:tagLine`, so the Android client may need endpoint alignment if you want both modules running together with the latest server structure.
 
 ## Data Sources
 
-The server integrates with:
-
-1. **Riot Games API** (official LoL data)
-   - Summoner API: `https://euw1.api.riotgames.com/lol/summoner/v4/`
-   - Match API: `https://europe.api.riotgames.com/lol/match/v5/`
-   - Champion Mastery API: `https://euw1.api.riotgames.com/lol/champion-mastery/v4/`
-   - League API: `https://euw1.api.riotgames.com/lol/league/v4/`
-
-2. **MongoDB**
-   - Collection: `matches` - Stored match data
-   - Collection: `positions` - Champion role classifications
-
-## Setup Instructions
-
-### Prerequisites
-- Bun installed
-- MongoDB running locally or accessible
-- Riot Games API key (get from [developer.riotgames.com](https://developer.riotgames.com/))
-
-### Installation
-
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   bun install
-   ```
-
-3. Create a `.env` file in the project root (you can copy `.env.example`):
-    ```
-    DB_URL=mongodb://0.0.0.0:27017
-    RIOT_API_KEY=your_riot_api_key_here
-    GET_RANDOM_MATCHES=false
-    ```
-
-4. Start MongoDB service
-
-5. Run the server:
-    ```bash
-# Development mode with hot reload
-bun run dev
-
-# Production mode
-bun run start
-
-# Type-check the project
-bun run typecheck
-     ```
-
-The server will run on port 3000 by default.
-
-## Configuration
-
-### Environment Variables
-
-- `DB_URL` - MongoDB connection string
-- `RIOT_API_KEY` - Your Riot Games API key
-- `GET_RANDOM_MATCHES` - Enable/disable automatic match collection (`true`/`false`)
-
-### Automatic Data Collection
-
-When `GET_RANDOM_MATCHES` is set to `true`, the server runs a background interval function that:
-1. Randomly selects a match from the database
-2. Picks a random participant from that match
-3. Fetches their recent match history
-4. Stores new matches in MongoDB
-
-This helps continuously grow the match database for more accurate statistics.
-
-## Dependencies
-
-```json
-{
-  "dependencies": {
-    "dotenv": "^17.0.0",
-    "mongodb": "^6.0.0"
-  },
-  "devDependencies": {
-    "@types/bun": "^1.3.0",
-    "typescript": "^5.9.0"
-  }
-}
-```
-
-## Features & Algorithms
-
-### Matchup Calculation
-The algorithm calculates matchups by:
-1. Identifying lane opponents (positions 0 vs 5, 1 vs 6, etc.)
-2. Tracking wins and losses against each champion
-3. Filtering for significant matchups (win rate ≥70% or ≤30%)
-4. Ranking by performance and returning top/bottom matchups
-
-### Position Detection
-Champion positions are determined by:
-1. Analyzing all matches where the champion was played
-2. Counting occurrences in each position (0-4 = team positions)
-3. Calculating percentage distribution
-4. Assigning positions that cumulatively reach 65% or more
-
-### Item Classification
-Items are categorized into:
-- **Boots**: 7 types (Mercury's, Berserker's, etc.)
-- **Mythics**: 26 items (historical mythic items)
-- **Legendaries**: 62+ core items
-
-## Future Improvements
-
-- Add rate limiting to avoid Riot API restrictions
-- Implement caching strategies for frequently accessed data
-- Add support for multiple regions
-- Implement more sophisticated statistics algorithms
-- Add real-time match tracking
-- Create web dashboard for monitoring
-- Add authentication and API key management
-- Implement data validation and error handling improvements
+- Riot Games API
+- CommunityDragon
+- MongoDB collections:
+  - `matches`
+  - `positions`
 
 ## License
 
-This project is an educational/fan application of League of Legends. All data is property of Riot Games and is used in accordance with their terms of service and API policies.
-
-## Credits
-
-- Data provided by Riot Games API
-- MongoDB for database management
-- Bun and MongoDB for the backend runtime and storage
-- Inspired by op.gg and other LoL statistics platforms
-
----
-
-Developed with ❤️ for the League of Legends community
+This project is an educational fan application for League of Legends. League of Legends and related assets are property of Riot Games and must be used according to Riot's policies.

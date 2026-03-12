@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="url_main_cd">https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/es_es/v1/</string>
+
+    <string name="network_error">Se ha producido un error, comprueba tu conexion a internet y reinicia la aplicación</string>
+    <string name="not_exist">No existe ese invocador</string>
+
+    <string name="summoner">Invocador</string>
+    <string name="champions">Campeones</string>
+    <string name="wiki">Enciclopedia</string>
+
+    <string name="recent_search">Búsquedas recientes</string>
+    <string name="search_sum">Buscar invocador…</string>
+    <string name="search_champ">Buscar campeon…</string>
+    <string name="search_item">Buscar objeto…</string>
+
+    <string name="url_champs_wiki">https://universe.leagueoflegends.com/es_ES/champions/</string>
+    <string name="url_region_wiki">https://universe.leagueoflegends.com/es_ES/regions/</string>
+    <string name="url_map_wiki">https://map.leagueoflegends.com/es_ES</string>
+
+    <string name="items">Objetos</string>
+    <string name="spells">Hechizos</string>
+    <string name="runes">Runas</string>
+    <string name="regions">Regiones</string>
+    <string name="map">Mapa</string>
+
+    <string name="not_enough_data">No hay suficientes estadisticas para ese personaje</string>
+
+    <string name="statistics">Estadísticas</string>
+    <string name="information">Información</string>
+
+    <string name="good_against">es FUERTE contra</string>
+    <string name="bad_against">es DEBIL contra</string>
+
+    <string name="option_a">Opcion A</string>
+    <string name="option_b">Opcion B</string>
+
+    <string name="recommended_runes">Runas Recomendadas</string>
+    <string name="recommended_spells">Hechizos recomendados</string>
+    <string name="recommended_mythics">Míticos recomendados</string>
+    <string name="recommended_legendaries">Legendarios recomendados</string>
+    <string name="recommended_boots">Botas recomendadas</string>
+
+    <string name="abilities">Habilidades</string>
+    <string name="difficulty">Difficulty</string>
+    <array name="difficulty_levels">
+        <item>Facil</item>
+        <item>Normal</item>
+        <item>Dificil</item>
+    </array>
+    <array name="type">
+        <item>Daño</item>
+        <item>Durabilidad</item>
+        <item>Control de adversario</item>
+        <item>Mobilidad</item>
+        <item>Utilidad</item>
+    </array>
+
+    <string name="solo_duo">Clasificatoria solo/duo</string>
+    <string name="flex">Clasificatoria Flexible</string>
+
+    <string name="team">Equipo</string>
+
+    <array name="charts">
+        <item>Daño total infligido a campeones</item>
+        <item>Daño fisico infligido a campeones</item>
+        <item>Daño mágico infligido a campeones</item>
+        <item>Daño verdadero infligido a campeones</item>
+        <item>Daño fisico infligido</item>
+        <item>Daño mágico infligido</item>
+        <item>Daño verdadero infligido</item>
+        <item>Daño total a torretas</item>
+        <item>Daño total a objetivos</item>
+        <item>Curacion realizada</item>
+        <item>Daño recibido</item>
+        <item>Daño fisico recibido</item>
+        <item>Daño verdadero recibido</item>
+        <item>Daño mitigado en uno mismo</item>
+        <item>Oro ganado</item>
+        <item>Oro gastado</item>
+        <item>Puntuacion de visión</item>
+        <item>Guardianes colocados</item>
+        <item>Guardianes destruidos</item>
+        <item>Guardianes de control comprados</item>
+        <item>Subditos asesinados</item>
+    </array>
+</resources>
